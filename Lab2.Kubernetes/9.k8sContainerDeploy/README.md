@@ -1,4 +1,10 @@
 # helm 기본기
+## tree설치
+```
+apt install tree
+```
+
+
 ## 설치 (vm01)
 ```
 wget https://get.helm.sh/helm-v3.6.2-linux-amd64.tar.gz
@@ -23,6 +29,7 @@ mkdir helmx
 cd helmx/
 helm create mychart
 helm install --dry-run --debug --generate-name ./mychart
+tree
 
 helm install example ./mychart --set service.type=NodePort
 
@@ -103,10 +110,12 @@ helm search hub tomcat
 helm search hub tomcat -o yaml
 # helm repo remove  bitnami
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install t1 bitnami/tomcat --set persistence.enabled=false,tomcatAllowRemoteManagement=1
+helm install t1 bitnami/tomcat --set persistence.enabled=false,tomcatAllowRemoteManagement=1,tomcatPassword=my-secure-password
+
 sleep 120
 kubectl get svc
 echo Password: $(kubectl get secret --namespace default t1-tomcat -o jsonpath="{.data.tomcat-password}" | base64 --decode)
+# user / my-secure-password      
 ```
 * 접속해 브라우저에서 접속해 볼 것. [vm01은 c:\Windows\System32\drivers\etc\hosts 파일에 셋팅필요. ip로 접속해도 무관함.또한 접속 포트는 위 스크립트의 실행 결과 참고할 것]
   - http://vm01:31636/
